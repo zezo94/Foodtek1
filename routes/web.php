@@ -3,6 +3,31 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\FoodItemController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ItemOptionController;
+use App\Http\Controllers\UserController;
+
+
+
+
+
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    Route::get('users', [UserController::class, 'index'])->name('users.index');
+    Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
+    Route::patch('users/{user}/toggle-role', [UserController::class, 'toggleRole'])->name('users.toggleRole');
+});
+
+
+
+
+
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    Route::resource('food-items', FoodItemController::class)->except('show');
+    Route::resource('categories', CategoryController::class)->except('show');
+    Route::resource('item-options', ItemOptionController::class)->except('show');
+});
+
+
 
 
 Route::middleware(['auth'])->group(function () {
@@ -19,7 +44,7 @@ Route::get('/register', fn() => view('auth.register'))->name('register');
 // إرسال بيانات التسجيل وتسجيل الدخول
 Route::post('/register', [AuthController::class, 'registerWeb']);
 Route::post('/login', [AuthController::class, 'loginWeb']);
-Route::post('/logout', [AuthController::class, 'logoutWeb'])->middleware('auth');
+Route::post('/logout', [AuthController::class, 'logoutWeb'])->middleware('auth')->name('logout');
 
 // صفحة لوحة المستخدم بعد الدخول
 Route::get('/dashboard', function () {

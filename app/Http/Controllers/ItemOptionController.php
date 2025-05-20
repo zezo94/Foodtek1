@@ -3,63 +3,60 @@
 namespace App\Http\Controllers;
 
 use App\Models\ItemOption;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class ItemOptionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $options = ItemOption::with('category')->get();
+        return view('admin.item_options.index', compact('options'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $categories = Category::all();
+        return view('admin.item_options.create', compact('categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'name_ar' => 'required|string|unique:item_options,name_ar',
+            'name_en' => 'required|string|unique:item_options,name_en',
+            'is_active' => 'boolean',
+        ]);
+
+        ItemOption::create($data);
+
+        return redirect()->route('item-options.index')->with('success', 'تمت إضافة الخيار بنجاح');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(ItemOption $itemOption)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(ItemOption $itemOption)
     {
-        //
+        $categories = Category::all();
+        return view('admin.item_options.edit', compact('itemOption', 'categories'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, ItemOption $itemOption)
     {
-        //
+        $data = $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'name_ar' => 'required|string|unique:item_options,name_ar,' . $itemOption->id,
+            'name_en' => 'required|string|unique:item_options,name_en,' . $itemOption->id,
+            'is_active' => 'boolean',
+        ]);
+
+        $itemOption->update($data);
+
+        return redirect()->route('item-options.index')->with('success', 'تم تحديث بيانات الخيار');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(ItemOption $itemOption)
     {
-        //
+        $itemOption->delete();
+        return back()->with('success', 'تم حذف الخيار');
     }
 }

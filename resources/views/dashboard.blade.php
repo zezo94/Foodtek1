@@ -21,27 +21,19 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div class="bg-white p-4 shadow rounded">
                 <h3 class="font-semibold text-lg">عدد المستخدمين</h3>
-                <p class="text-2xl text-blue-500 font-bold">123</p>
+                <p class="text-2xl text-blue-500 font-bold">{{ \App\Models\User::count() }}</p>
             </div>
             <div class="bg-white p-4 shadow rounded">
                 <h3 class="font-semibold text-lg">عدد المطاعم</h3>
-                <p class="text-2xl text-green-500 font-bold">12</p>
+                <p class="text-2xl text-green-500 font-bold">{{ \App\Models\Restaurant::count() }}</p>
             </div>
             <div class="bg-white p-4 shadow rounded">
-                <h3 class="font-semibold text-lg">عدد الطلبات</h3>
-                <p class="text-2xl text-red-500 font-bold">75</p>
+                <h3 class="font-semibold text-lg">عدد عناصر الطعام</h3>
+                <p class="text-2xl text-red-500 font-bold">{{ \App\Models\FoodItem::count() }}</p>
             </div>
-
         </div>
 
-        <div class="space-y-2">
-            <a href="#" class="block bg-blue-600 text-white px-4 py-2 rounded text-center">➕ إضافة مطعم</a>
-            <a href="#" class="block bg-gray-700 text-white px-4 py-2 rounded text-center">📋 عرض الطلبات</a>
-            <a href="#" class="block bg-purple-600 text-white px-4 py-2 rounded text-center">🛒 قائمة الوجبات</a>
 
-            <a href="{{ route('food-items.index') }}" class="block bg-purple-600 text-white px-4 py-2 rounded text-center">📋 إدارة عناصر الطعام</a>
-
-        </div>
     @elseif ($role === 'client')
         <p>مرحباً بك في تطبيق Foodtek! يمكنك استعراض المطاعم وطلب الطعام بسهولة.</p>
         <a href="#" class="mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded">ابدأ الطلب الآن</a>
